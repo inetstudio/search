@@ -50,7 +50,7 @@ class ElasticsearchEngine extends Engine
             $params['body'][] = [
                 'update' => [
                     '_id' => $model->getKey(),
-                    '_index' => $this->index,
+                    '_index' => method_exists($model, 'searchableIndex') ? $model->searchableIndex() : $this->index,
                     '_type' => $model->searchableAs(),
                 ]
             ];
@@ -77,7 +77,7 @@ class ElasticsearchEngine extends Engine
             $params['body'][] = [
                 'delete' => [
                     '_id' => $model->getKey(),
-                    '_index' => $this->index,
+                    '_index' => method_exists($model, 'searchableIndex') ? $model->searchableIndex() : $this->index,
                     '_type' => $model->searchableAs(),
                 ]
             ];
