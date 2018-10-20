@@ -6,8 +6,10 @@ use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 use Elasticsearch\Client as Elastic;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as BaseCollection;
 
+/**
+ * Class ElasticsearchEngine.
+ */
 class ElasticsearchEngine extends Engine
 {
     /**
@@ -28,6 +30,7 @@ class ElasticsearchEngine extends Engine
      * Create a new engine instance.
      *
      * @param \Elasticsearch\Client $elastic
+     * @param string $index
      * @return void
      */
     public function __construct(Elastic $elastic, $index)
@@ -202,11 +205,12 @@ class ElasticsearchEngine extends Engine
     /**
      * Map the given results to instances of the given model.
      *
+     * @param  Builder $builder
      * @param  mixed $results
      * @param  \Illuminate\Database\Eloquent\Model $model
      * @return Collection
      */
-    public function map($results, $model)
+    public function map(Builder $builder, $results, $model)
     {
         if ($results['hits']['total'] === 0) {
             return Collection::make();
