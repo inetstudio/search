@@ -10,8 +10,8 @@
       }
     ],
     "require": {
-      "laravel/scout": "^5.0",
-      "elasticsearch/elasticsearch": "^6.0"
+      "laravel/scout": "^7.1.0",
+      "elasticsearch/elasticsearch": "^6.1"
     },
     "autoload": {
       "psr-4": {
