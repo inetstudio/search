@@ -228,6 +228,14 @@ class ElasticsearchEngine extends Engine
         })->filter()->values();
     }
 
+    public function flush($model)
+    {
+        $query = $model::usesSoftDelete() ? $model->withTrashed() : $model->newQuery();
+        $query
+            ->orderBy($model->getKeyName())
+            ->unsearchable();
+    }
+
     /**
      * Get the total count from a raw result returned by the engine.
      *
