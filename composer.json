@@ -1,28 +1,29 @@
 {
-    "name": "inetstudio/search",
-    "description": "Package for search",
-    "homepage": "https://github.com/inetstudio/search",
-    "license": "MIT",
-    "authors": [
-      {
-        "name": "Konstantin Bukin",
-        "email": "bukin@inetstudio.ru"
-      }
-    ],
-    "require": {
-      "laravel/scout": "^7.1.0",
-      "elasticsearch/elasticsearch": "^6.1"
-    },
-    "autoload": {
-      "psr-4": {
-        "InetStudio\\Search\\": "src/"
-      }
-    },
-    "extra": {
-      "laravel": {
-        "providers": [
-          "InetStudio\\Search\\Providers\\SearchServiceProvider"
-        ]
-      }
+  "name": "inetstudio/search",
+  "description": "Package for search",
+  "homepage": "https://github.com/inetstudio/search",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Konstantin Bukin",
+      "email": "bukin@inetstudio.ru"
     }
+  ],
+  "require": {
+    "laravel/scout": "^7.1.0",
+    "elasticsearch/elasticsearch": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "InetStudio\\SearchPackage\\Search\\": "entities/search/src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "InetStudio\\SearchPackage\\Search\\Providers\\BindingsServiceProvider",
+        "InetStudio\\SearchPackage\\Search\\Providers\\ServiceProvider"
+      ]
+    }
+  }
 }
