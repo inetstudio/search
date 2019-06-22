@@ -59,11 +59,11 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
                     '_id' => $model->getKey(),
                     '_index' => method_exists($model, 'searchableIndex') ? $model->searchableIndex() : $this->index,
                     '_type' => $model->searchableAs(),
-                ]
+                ],
             ];
             $params['body'][] = [
                 'doc' => $model->toSearchableArray(),
-                'doc_as_upsert' => true
+                'doc_as_upsert' => true,
             ];
         });
 
@@ -87,7 +87,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
                     '_id' => $model->getKey(),
                     '_index' => method_exists($model, 'searchableIndex') ? $model->searchableIndex() : $this->index,
                     '_type' => $model->searchableAs(),
-                ]
+                ],
             ];
         });
 
@@ -147,10 +147,10 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
             'body' => [
                 'query' => [
                     'bool' => [
-                        'must' => [['query_string' => ['query' => "*{$builder->query}*"]]]
-                    ]
-                ]
-            ]
+                        'must' => [['query_string' => ['query' => "*{$builder->query}*"]]],
+                    ],
+                ],
+            ],
         ];
 
         if ($sort = $this->sort($builder)) {
@@ -274,7 +274,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
     protected function sort($builder)
     {
         if (count($builder->orders) == 0) {
-            return null;
+            return;
         }
 
         return collect($builder->orders)->map(function ($order) {
