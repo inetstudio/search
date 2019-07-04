@@ -8,7 +8,7 @@ use InetStudio\SearchPackage\Search\Contracts\Services\Front\SearchServiceContra
 /**
  * Class SearchService.
  */
-final class SearchService implements SearchServiceContract
+class SearchService implements SearchServiceContract
 {
     /**
      * Выполняем поиск.
