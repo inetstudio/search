@@ -15,6 +15,7 @@ class BindingsServiceProvider extends BaseServiceProvider implements DeferrableP
      */
     public $bindings = [
         'InetStudio\SearchPackage\Search\Contracts\Engines\ElasticSearchEngineContract' => 'InetStudio\SearchPackage\Search\Engines\ElasticSearchEngine',
+        'InetStudio\SearchPackage\Search\Contracts\Services\Front\SearchServiceContract' => 'InetStudio\SearchPackage\Search\Services\Front\SearchService',
     ];
 
     /**
