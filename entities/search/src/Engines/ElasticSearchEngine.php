@@ -224,32 +224,16 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
     public function map(Builder $builder, $results, $model)
     {
         if ($results['hits']['total'] === 0) {
-            return Collection::make();
+            return $model->newCollection();
         }
 
-        $keys = collect($results['hits']['hits'])
-            ->pluck('_id')->values()->all();
+        $keys = collect($results['hits']['hits'])->pluck('_id')->values()->all();
 
-        $models = $model->whereIn(
-            $model->getKeyName(), $keys
-        )->get()->keyBy($model->getKeyName());
-
-        return collect($results['hits']['hits'])->map(function ($hit) use ($model, $models) {
-            return isset($models[$hit['_id']]) ? $models[$hit['_id']] : null;
-        })->filter()->values();
-    }
-
-    /**
-     * Flush all of the model's records from the engine.
-     *
-     * @param  Model  $model
-     */
-    public function flush($model)
-    {
-        $query = $model::usesSoftDelete() ? $model->withTrashed() : $model->newQuery();
-        $query
-            ->orderBy($model->getKeyName())
-            ->unsearchable();
+        return $model->getScoutModelsByIds(
+            $builder, $keys
+        )->filter(function ($model) use ($keys) {
+            return in_array($model->getScoutKey(), $keys);
+        });
     }
 
     /**
@@ -265,6 +249,20 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
     }
 
     /**
+     * Flush all of the model's records from the engine.
+     *
+     * @param  Model  $model
+     *
+     * @return void
+     */
+    public function flush($model)
+    {
+        $model->newQuery()
+            ->orderBy($model->getKeyName())
+            ->unsearchable();
+    }
+
+    /**
      * Generates the sort if theres any.
      *
      * @param  Builder  $builder
@@ -274,7 +272,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
     protected function sort($builder)
     {
         if (count($builder->orders) == 0) {
-            return;
+            return null;
         }
 
         return collect($builder->orders)->map(function ($order) {
