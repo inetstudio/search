@@ -65,8 +65,8 @@ class SearchService implements SearchServiceContract
         }
 
         return [
-            'stop' => isset($params['paging']) && ($params['paging']['page']+1)*$params['paging']['limit'] >= $response['hits']['total'],
-            'total' => $response['hits']['total'],
+            'stop' => isset($params['paging']) && ($params['paging']['page'] + 1) * $params['paging']['limit'] >= $response['hits']['total']['value'],
+            'count' => $response['hits']['total']['value'],
             'items' => $items,
         ];
     }
