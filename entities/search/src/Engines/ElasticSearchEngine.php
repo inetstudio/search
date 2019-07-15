@@ -54,20 +54,26 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
         $params['body'] = [];
 
         $models->each(function ($model) use (&$params) {
-            $params['body'][] = [
-                'update' => [
-                    '_id' => $model->getKey(),
-                    '_index' => method_exists($model, 'searchableIndex') ? $model->searchableIndex() : $this->index,
-                    '_type' => $model->searchableAs(),
-                ],
-            ];
-            $params['body'][] = [
-                'doc' => $model->toSearchableArray(),
-                'doc_as_upsert' => true,
-            ];
+            $doc = $model->toSearchableArray();
+
+            if (! empty($doc)) {
+                $params['body'][] = [
+                    'update' => [
+                        '_id' => $model->getKey(),
+                        '_index' => method_exists($model, 'searchableIndex') ? $model->searchableIndex() : $this->index,
+                        '_type' => $model->searchableAs(),
+                    ],
+                ];
+                $params['body'][] = [
+                    'doc' => $model->toSearchableArray(),
+                    'doc_as_upsert' => true,
+                ];
+            }
         });
 
-        $this->elastic->bulk($params);
+        if (! empty($params['body'])) {
+            $this->elastic->bulk($params);
+        }
     }
 
     /**
