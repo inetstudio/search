@@ -15,20 +15,11 @@ class SearchService implements SearchServiceContract
      *
      * @param array $searchParams
      * @param array $services
-     * @param array $params
-     * @param string $cacheKey
      *
      * @return array
      */
-    public function search(array $searchParams, array $services, array $params, string $cacheKey = '')
+    public function search(array $searchParams, array $services)
     {
-        if (isset($params['paging'])) {
-            $searchParams['body']['from'] = $params['paging']['page']*$params['paging']['limit'];
-            $searchParams['body']['size'] = $params['paging']['limit'];
-        } else {
-            $searchParams['body']['size'] = 9999;
-        }
-
         $elastic = ClientBuilder::create()
             ->setHosts(config('scout.elasticsearch.hosts'))
             ->build();
@@ -49,9 +40,9 @@ class SearchService implements SearchServiceContract
         $items = collect([]);
         $unsortedItems = collect([]);
 
-        foreach ($ids as $type => $itemIDs) {
+        foreach ($ids as $type => $itemIds) {
             if (isset($services[$type])) {
-                $searchItems = call_user_func_array([$services[$type]['service'], $services[$type]['method']], [$itemIDs, $services[$type]['params'], [$cacheKey]]);
+                $searchItems = call_user_func_array([$services[$type]['service'], $services[$type]['method']], [$itemIds, $services[$type]['params']]);
                 $unsortedItems = collect([$unsortedItems, $searchItems])->collapse();
             }
         }
@@ -65,7 +56,6 @@ class SearchService implements SearchServiceContract
         }
 
         return [
-            'stop' => isset($params['paging']) && ($params['paging']['page'] + 1) * $params['paging']['limit'] >= $response['hits']['total']['value'],
             'count' => $response['hits']['total']['value'],
             'items' => $items,
         ];
