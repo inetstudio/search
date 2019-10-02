@@ -278,7 +278,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
     protected function sort($builder)
     {
         if (count($builder->orders) == 0) {
-            return null;
+            return;
         }
 
         return collect($builder->orders)->map(function ($order) {
