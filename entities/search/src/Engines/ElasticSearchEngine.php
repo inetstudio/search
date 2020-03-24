@@ -33,8 +33,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
      *
      * @param  Elastic  $elastic
      * @param  string  $index
-     *
-     * @return void
+
      */
     public function __construct(Elastic $elastic, $index)
     {
@@ -46,8 +45,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
      * Update the given model in the index.
      *
      * @param  Collection  $models
-     *
-     * @return void
+
      */
     public function update($models)
     {
@@ -80,8 +78,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
      * Remove the given model from the index.
      *
      * @param  Collection  $models
-     *
-     * @return void
+
      */
     public function delete($models)
     {
@@ -258,8 +255,7 @@ class ElasticSearchEngine extends Engine implements ElasticSearchEngineContract
      * Flush all of the model's records from the engine.
      *
      * @param  Model  $model
-     *
-     * @return void
+
      */
     public function flush($model)
     {
