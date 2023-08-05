@@ -3,7 +3,7 @@
 namespace InetStudio\SearchPackage\Search\Providers;
 
 use Laravel\Scout\EngineManager;
-use Elasticsearch\ClientBuilder as ElasticBuilder;
+use Elastic\Elasticsearch\ClientBuilder as ElasticBuilder;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 /**
